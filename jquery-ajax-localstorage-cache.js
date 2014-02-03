@@ -1,10 +1,21 @@
-// github.com/paulirish/jquery-ajax-localstorage-cache
-// dependent on Modernizr's localStorage test
+// Fork of github.com/paulirish/jquery-ajax-localstorage-cache without Modernizr dependency.
+// See https://github.com/paulirish/jquery-ajax-localstorage-cache/pull/18
 
 $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
-
+ 
+   function localStorageExists() {
+     var mod = 'modernizr';
+     try {
+       localStorage.setItem(mod, mod);
+       localStorage.removeItem(mod);
+       return true;
+     } catch(e) {
+       return false;
+     }
+   }
+   
   // Cache it ?
-  if ( !Modernizr.localstorage || !options.localCache ) return;
+  if ( !localStorageExists() || !options.localCache ) return;
 
   var hourstl = options.cacheTTL || 5;
 
